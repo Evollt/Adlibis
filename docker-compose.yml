@@ -1,0 +1,55 @@
+services:
+  nginx:
+    image: "nginx:stable-alpine"
+    ports:
+      - "${NGINX_PORT}:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./:/var/www/app
+    depends_on:
+      - mysql
+      - php
+    networks:
+      - adlibis
+  php:
+    build:
+      context: docker
+      dockerfile: php.Dockerfile
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - adlibis
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - "./docker/volume/mysql:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - adlibis
+  composer:
+    build:
+      context: docker
+      dockerfile: composer.Dockerfile
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - adlibis
+  artisan:
+    build:
+      context: docker
+      dockerfile: php.Dockerfile
+    volumes:
+      - ./:/var/www/app
+    entrypoint: ["php", "/var/www/app/artisan"]
+    networks:
+      - adlibis
+
+networks:
+  adlibis:
+    external: true
+    name: ${DOCKER_NETWORK}
