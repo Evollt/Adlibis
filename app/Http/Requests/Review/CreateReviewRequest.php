@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\VideoArticle;
+namespace App\Http\Requests\Review;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateVideoArticleRequest extends FormRequest
+class CreateReviewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,10 @@ class CreateVideoArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'video' => ['required', 'file', 'mimetypes:video/mp4', 'max:512000'],
+            'reviewable_type' => ['required', 'numeric'],
+            'reviewable_id' => ['required', 'numeric'],
+            'comment' => ['required', 'string', 'max:255'],
+            'parent_id' => ['nullable', 'exists:reviews,id'],
         ];
     }
 }

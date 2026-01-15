@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -14,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $comment
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Review newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Review newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Review query()
@@ -26,9 +31,24 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Review whereReviewableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Review whereReviewerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Review whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Review extends Model
 {
-    //
+    /** @use HasFactory<\Database\Factories\ReviewFactory> */
+    use HasFactory;
+
+    protected $fillable = [
+        'reviewable_type',
+        'reviewable_id',
+        'comment',
+        'parent_id',
+        'reviewer_id',
+    ];
+
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewer_id');
+    }
 }

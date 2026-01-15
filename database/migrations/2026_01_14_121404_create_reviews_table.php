@@ -24,7 +24,6 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('reviews')
                 ->onDelete('cascade');
-            $table->float('rating')->nullable();
             $table->text('comment');
             $table->timestamps();
 
