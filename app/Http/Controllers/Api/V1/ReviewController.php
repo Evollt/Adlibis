@@ -10,6 +10,8 @@ use App\Http\Requests\Review\GetReviewRequest;
 use App\Http\Requests\Review\UpdateReviewRequest;
 use App\Http\Resources\ReviewResource;
 use App\Services\ReviewService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ReviewController extends Controller
 {
@@ -21,7 +23,7 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(GetReviewRequest $request, ReviewService $reviewService)
+    public function index(GetReviewRequest $request, ReviewService $reviewService): AnonymousResourceCollection
     {
         return $reviewService->index($request);
     }
@@ -29,9 +31,9 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateReviewRequest $request, ReviewService $reviewService)
+    public function store(CreateReviewRequest $request, ReviewService $reviewService): JsonResponse
     {
-        $review = $reviewService->store($request->validated());
+        $review = $reviewService->store($request);
 
         return response()->json(new ReviewResource($review));
     }
@@ -39,7 +41,7 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id, ReviewService $reviewService)
+    public function show(string $id, ReviewService $reviewService): JsonResponse
     {
         $review = $reviewService->show($id);
 
@@ -49,7 +51,7 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateReviewRequest $request, string $id, ReviewService $reviewService)
+    public function update(UpdateReviewRequest $request, string $id, ReviewService $reviewService): JsonResponse
     {
         $review = $reviewService->update($id, $request);
 
@@ -59,7 +61,7 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, ReviewService $reviewService)
+    public function destroy(string $id, ReviewService $reviewService): JsonResponse
     {
         $reviewService->destroy($id);
 

@@ -10,6 +10,7 @@ use App\Http\Requests\Review\GetReviewRequest;
 use App\Http\Requests\Review\UpdateReviewRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\Review;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class ReviewService
@@ -20,7 +21,7 @@ class ReviewService
         ReviewTypeEnums::USER->value => \App\Models\User::class,
     ];
 
-    public function index(GetReviewRequest $request)
+    public function index(GetReviewRequest $request): AnonymousResourceCollection
     {
         $type = $request->query('reviewable_type');
         $id = $request->query('reviewable_id');
@@ -40,7 +41,7 @@ class ReviewService
         return ReviewResource::collection($paginated);
     }
 
-    public function store(CreateReviewRequest $request)
+    public function store(CreateReviewRequest $request): Review
     {
         $data = $request->validated();
 

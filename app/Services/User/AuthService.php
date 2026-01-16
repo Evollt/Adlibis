@@ -9,6 +9,7 @@ use App\Http\Requests\User\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -39,7 +40,7 @@ class AuthService
         return $user;
     }
 
-    public function createToken(User $user)
+    public function createToken(User $user): JsonResponse
     {
         return response()->json(
             array_merge(

@@ -12,7 +12,7 @@ class VideoArticleService
 {
     public function index(string $perPage): LengthAwarePaginator
     {
-        $videoArticles = VideoArticle::paginate($perPage);
+        $videoArticles = VideoArticle::paginate((int) $perPage);
 
         return $videoArticles;
     }

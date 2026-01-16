@@ -6,12 +6,13 @@ namespace App\Services\Article;
 
 use App\Http\Requests\Article\CreateArticleRequest;
 use App\Models\Article;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArticleService
 {
-    public function index(string $perPage)
+    public function index(string $perPage): LengthAwarePaginator
     {
-        $articles = Article::paginate($perPage);
+        $articles = Article::paginate((int) $perPage);
 
         return $articles;
     }
